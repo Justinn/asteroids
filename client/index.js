@@ -29,16 +29,15 @@ let player;
 let cursors;
 let playerSpeed = 150;
 let bg;
+let bullets;
+let fire;
+let lastFired = 0;
 
 function preload() {
-  this.load.image('player', 'assets/player1.png');
+  this.load.image('player', 'assets/player.png');
   this.load.image('background', 'assets/nebula.jpg');
-//   this.load.image('stars', 'assets/tests/space/stars.png');
-  this.load.atlas(
-    'space',
-    'assets/space.png',
-    'assets/space.json'
-  );
+  //   this.load.image('stars', 'assets/tests/space/stars.png');
+  this.load.atlas('space', 'assets/space.png', 'assets/space.json');
 }
 
 function create() {
@@ -46,6 +45,53 @@ function create() {
   bg = this.add.tileSprite(400, 300, 800, 600, 'background').setScrollFactor(0);
 
   //Player
+  let Bullet = new Phaser.Class({
+    Extends: Phaser.Physics.Arcade.Image,
+
+    initialize: function Bullet(scene) {
+      Phaser.Physics.Arcade.Image.call(this, scene, 0, 0, 'space', 'bullet');
+
+      this.setBlendMode(1);
+      this.setDepth(1);
+
+      this.speed = 1000;
+      this.lifespan = 1000;
+
+      this._temp = new Phaser.Math.Vector2();
+    },
+
+    fire: function(player) {
+      this.lifespan = 1000;
+
+      this.setActive(true);
+      this.setVisible(true);
+      this.setAngle(player.body.rotation);
+      this.setPosition(player.x, player.y);
+      this.body.reset(player.x, player.y);
+
+      let angle = Phaser.Math.DegToRad(player.body.rotation);
+
+      this.scene.physics.velocityFromRotation(
+        angle,
+        this.speed,
+        this.body.velocity
+      );
+
+      this.body.velocity.x *= 2;
+      this.body.velocity.y *= 2;
+    },
+
+    update: function(time, delta) {
+      this.lifespan -= delta;
+
+      if (this.lifespan <= 0) {
+        this.setActive(false);
+        this.setVisible(false);
+        this.body.stop();
+      }
+    },
+  });
+
   let particles = this.add.particles('space');
   let emitter = particles.createEmitter({
     frame: 'red',
@@ -66,22 +112,30 @@ function create() {
         return player.angle - 180 + v;
       },
     },
-    scale: { start: 0.2, end: 0 },
+    scale: { start: 0.3, end: 0 },
     blendMode: 'ADD',
   });
 
-  player = this.physics.add.image(0, 0, 'player')
+  player = this.physics.add.image(0, 0, 'player').setDepth(2);
   player.setDrag(300);
   player.setAngularDrag(400);
   player.setMaxVelocity(600);
   emitter.startFollow(player);
   this.cameras.main.startFollow(player);
 
+  bullets = this.physics.add.group({
+    classType: Bullet,
+    maxSize: 30,
+    runChildUpdate: true,
+  });
+
   //Controls
   cursors = this.input.keyboard.createCursorKeys();
+  fire = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
 }
 
-function update() {
+function update(time, delta) {
   player.setAcceleration(0);
   player.setAngularVelocity(0);
   if (cursors.up.isDown) {
@@ -97,11 +151,20 @@ function update() {
     player.setAngularVelocity(playerSpeed);
   }
 
+  if (fire.isDown && time > lastFired)
+  {
+      const bullet = bullets.get();
+
+      if (bullet)
+      {
+          bullet.fire(player);
+
+          lastFired = time + 100;
+      }
+  }
+
   bg.tilePositionX += player.body.deltaX() * 0.5;
   bg.tilePositionY += player.body.deltaY() * 0.5;
 }
 
 function render() {}
-
-
-
