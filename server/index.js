@@ -3,7 +3,7 @@ const app = express();
 const server = require('http').Server(app)
 const io = require('socket.io').listen(server)
 
-app.use('/css', express.static(__dirname + '/css'))
+// app.use('/css', express.static(__dirname + '/css'))
 app.use('/client', express.static(__dirname + '/client'))
 app.use('/assets', express.static(__dirname + '/assets'))
 

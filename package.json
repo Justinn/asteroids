@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack",
-    "start-server": "nodemon server/server.js --ignore public"
+    "start-server": "nodemon server --ignore public"
   },
   "repository": {
     "type": "git",
