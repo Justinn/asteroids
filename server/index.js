@@ -8,7 +8,7 @@ app.use('/client', express.static(__dirname + '/client'))
 app.use('/assets', express.static(__dirname + '/assets'))
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html')
+    res.sendFile(__dirname + '/../public/index.html')
 })
 
 server.listen(43594, () => {

@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack",
-    "start-server": "nodemon server --ignore public"
+    "start-server": "nodemon server --ignore public",
+    "start": "npm run build-watch & npm run start-server",
+    "build-watch": "webpack -w"
   },
   "repository": {
     "type": "git",
