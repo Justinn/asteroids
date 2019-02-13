@@ -6,7 +6,7 @@ const io = require('socket.io').listen(server)
 
 // app.use('/css', express.static(__dirname + '/css'))
 app.use(express.static(path.join(__dirname, '../public')))
-// app.use('/assets', express.static(__dirname + '/assets'))
+app.use('/assets', express.static(__dirname + '../assets'))
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'))
