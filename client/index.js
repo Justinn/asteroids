@@ -21,6 +21,5 @@ const config = {
 };
 
 let game = new Phaser.Game(config);
-game.scene.add('Game', Game);
 
 export default game;

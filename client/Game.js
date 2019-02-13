@@ -1,6 +1,6 @@
 import 'phaser';
 import Client from './Client';
-import game from './index'
+import game from './index';
 
 let player;
 let cursors;
@@ -10,7 +10,7 @@ let bullets;
 let fire;
 let lastFired = 0;
 
-let Game = {}
+let Game = {};
 
 Game.preload = function() {
   this.load.image('player', 'assets/player.png');
@@ -117,11 +117,12 @@ Game.create = function() {
   //SOCKETS
   Client.addPlayer();
 
-  console.log(this)
+  console.log(this);
 };
 
-Game.addNewPlayer = function(x, y) {
-  console.log(game)
+Game.addNewPlayer = function(id, x, y) {
+  player.playerId = id;
+  game.scene.scenes[0].add.sprite(x, y, 'player');
 };
 
 Game.update = function update(time, delta) {
@@ -133,6 +134,7 @@ Game.update = function update(time, delta) {
       playerSpeed,
       player.body.acceleration
     );
+    Client.updatePlayerMovement(player.x, player.y)
   }
   if (cursors.left.isDown) {
     player.setAngularVelocity(-playerSpeed);
@@ -145,7 +147,6 @@ Game.update = function update(time, delta) {
 
     if (bullet) {
       bullet.fire(player);
-
       lastFired = time + 100;
     }
   }

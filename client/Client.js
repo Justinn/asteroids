@@ -7,9 +7,13 @@ Client.addPlayer = function() {
   Client.socket.emit('addPlayer');
 };
 
-Client.socket.on('newPlayer', function(data) {
+Client.updatePlayerMovement = function(id, x, y) {
+  Client.socket.emit('updatePlayerMovement', {id, x, y})
+}
+
+Client.socket.on('newPlayer', function(player) {
   console.log('theres a new player');
-  Game.addNewPlayer(data.x, data.y);
+  Game.addNewPlayer(player.id, player.x, player.y);
 });
 
 export default Client;
