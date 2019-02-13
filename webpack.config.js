@@ -8,16 +8,18 @@ module.exports = {
     entry: './client/index.js',
 
     output: {
-        path: path.resolve(__dirname, 'public'),
-        publicPath: '/public/',
+        path: path.join(__dirname, '/public'),
         filename: 'bundle.js'
     },
+
+    devtool: 'source-map',
 
     module: {
         rules: [
           {
-            test: [ /\.vert$/, /\.frag$/ ],
-            use: 'raw-loader'
+            test: /jsx?$/,
+            exclude: /(node_modules|bower_components)/,
+            use: 'babel-loader'
           }
         ]
     },

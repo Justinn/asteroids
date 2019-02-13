@@ -6,8 +6,9 @@
   "scripts": {
     "build": "webpack",
     "start-server": "nodemon server --ignore public",
-    "start": "npm run build-watch & npm run start-server",
-    "build-watch": "webpack -w"
+    "build-watch": "webpack -w",
+    "start": "npm run build-watch & npm run start-server"
+    
   },
   "repository": {
     "type": "git",
@@ -21,10 +22,15 @@
   },
   "homepage": "https://github.com/photonstorm/phaser3-project-template#readme",
   "devDependencies": {
-    "webpack": "^3.4.1",
-    "raw-loader": "^0.5.1"
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "raw-loader": "^0.5.1",
+    "webpack": "^3.4.1"
   },
   "dependencies": {
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-2": "^6.24.1",
     "express": "^4.16.4",
     "nodemon": "^1.18.10",
     "phaser": "^3.3.0",
