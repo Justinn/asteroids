@@ -21,6 +21,7 @@ Game.preload = function() {
 Game.create = function() {
   //World
   bg = this.add.tileSprite(400, 300, 800, 600, 'background').setScrollFactor(0);
+  Game.playerMap = {};
 
   //Player
   let Bullet = new Phaser.Class({
@@ -116,13 +117,10 @@ Game.create = function() {
 
   //SOCKETS
   Client.addPlayer();
-
-  console.log(this);
 };
 
 Game.addNewPlayer = function(id, x, y) {
-  player.playerId = id;
-  game.scene.scenes[0].add.sprite(x, y, 'player');
+  Game.playerMap[id] = game.scene.scenes[0].add.sprite(x, y, 'player');
 };
 
 Game.update = function update(time, delta) {
@@ -134,7 +132,7 @@ Game.update = function update(time, delta) {
       playerSpeed,
       player.body.acceleration
     );
-    Client.updatePlayerMovement(player.x, player.y)
+    Client.updatePlayerMovement(player.playerId, player.x, player.y)
   }
   if (cursors.left.isDown) {
     player.setAngularVelocity(-playerSpeed);
@@ -154,6 +152,11 @@ Game.update = function update(time, delta) {
   bg.tilePositionX += player.body.deltaX() * 0.5;
   bg.tilePositionY += player.body.deltaY() * 0.5;
 };
+
+Game.updatePlayerMovement = function(id, x, y) {
+  let player = Game.playerMap[id]
+ console.log(x)
+}
 
 Game.render = function() {};
 
